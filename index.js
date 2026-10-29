@@ -2103,7 +2103,10 @@ const HTML_PAGE = `
 
 export default {
     async fetch(request, env, ctx) {
-        return handleRequest(request);
+        const authHeader = request.headers.get('Authorization');
+        if (env.API_KEY && authHeader !== `Bearer ${env.API_KEY}`) {
+          return new Response('Unauthorized', { status: 401 });
+        }
     }
 };
 
